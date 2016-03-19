@@ -27,7 +27,6 @@ function addCorpse (delta, state, metadata) {
 }
 
 function respawn (delta, state, metadata) {
-  console.log('respawn');
   return [
     [p(metadata.avatars.target.id, 'amazing.avatar.position'), {x: 50, y: 50}],
     [p(metadata.avatars.target.id, 'amazing.avatar.velocity'), {x: 0, y: 0}],
@@ -36,14 +35,11 @@ function respawn (delta, state, metadata) {
 }
 
 function storeDuration (delta, state, metadata) {
-  console.log('storeDuration');
   var time = {
     id: next('score'),
     playerId: metadata.avatars.target.id,
     duration: state.get(p(metadata.avatars.target.id, 'amazing.time'))
   };
-
-  console.log(time);
 
   return [
     p(metadata.avatars.target.id, 'amazing.times+'), time

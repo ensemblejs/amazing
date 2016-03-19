@@ -64,7 +64,9 @@ module.exports = {
       right: [
         {call: startTimer, onRelease: true}, {call: right, onRelease: true}
       ],
-      touch0: [{call: startTimerTouch}, {call: move}]
+      touch0: [
+        {call: startTimerTouch, onRelease: true}, {call: move, onRelease: true}
+      ]
     };
   }
 };

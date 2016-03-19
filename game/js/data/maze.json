@@ -29,8 +29,8 @@
   "spawn": {"x": 50, "y": 50},
   "goal": [
     {
-      "position": {"x": 510, "y": 420},
-      "width": 10,
+      "position": {"x": 515, "y": 420},
+      "width": 5,
       "height": 20
     }
   ]

@@ -29,7 +29,7 @@ module.exports = {
     function createBoard () {
       var shape = new PIXI.Graphics();
       shape.beginFill(0x38806F);
-      shape.drawRect(10, 10, 500, 500);
+      shape.drawRect(0, 0, 520, 520);
       shape.zIndex = 10000;
 
       return shape;
@@ -136,9 +136,6 @@ module.exports = {
     function addTimeToLeaderboard (players) {
       var leaderboard = getFullLeaderboard(players);
       var top10 = take(leaderboard, 10);
-
-      // console.log(leaderboard);
-      // console.log(players);
 
       each(leaderboard, function (entry) {
         var id = '#leaderboard-entry-' + entry.id;
