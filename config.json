@@ -1,0 +1,31 @@
+{
+  "client": {
+    "aspectRatio": 1
+  },
+  "amazing": {
+    "board": {
+      "width": 520,
+      "height": 520
+    },
+    "avatar": {
+      "speed": 100
+    },
+    "shapes": ["circle", "square"],
+    "colours": [
+      "0xFF0000", "0x00FF00", "0x0000FF", "0xFFFF00", "0xFF00FF",
+      "0x00FFFF", "0xFF8800", "0xFF0088", "0x88FF00", "0x00FF88",
+      "0x8800FF", "0x0088FF", "0xFFFF88", "0xFF88FF", "0x88FFFF"
+    ]
+  },
+  "ensemble": {
+    "maxPlayers": 30,
+    "pause": "never"
+  },
+  "debug": {
+    "develop": true,
+    "multiplayer": true
+  },
+  "logging": {
+    "logLevel": "warn"
+  }
+}

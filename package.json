@@ -1,0 +1,25 @@
+{
+  "name": "amazing",
+  "version": "1.0.0",
+  "description": "A simple multiplayer maze demo for ensemblejs",
+  "engines": {
+    "node": "latest",
+    "npm": "latest"
+  },
+  "dependencies": {
+    "ensemblejs": "file:///Users/distributedlife/projects/ensemblejs",
+    "gamepad-api-mappings": "^4.0.0",
+    "jade": "^1.11.0",
+    "numeral": "^1.5.3",
+    "pixi.js": "^3.0.9"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  },
+  "scripts": {
+    "start": "gulp && gulp db:start && node game.js | bunyan -o short || true && gulp db:stop",
+    "test": "gulp test"
+  },
+  "author": "Ryan Boucher",
+  "license": "BSD"
+}

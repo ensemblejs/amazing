@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+build
+game/js/gen
+dist
+couchdb.stderr
+couchdb.stdout
