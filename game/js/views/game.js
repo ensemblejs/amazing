@@ -5,10 +5,10 @@ var walls = require('../data/maze').walls;
 var goal = require('../data/maze').goal;
 var each = require('lodash').each;
 var reduce = require('lodash').reduce;
-var first = require('lodash').first;
 var filter = require('lodash').filter;
 var take = require('lodash').take;
 var sortBy = require('lodash').sortBy;
+var map = require('lodash').map;
 var numeral = require('numeral');
 var shapeSpecificProperties = require('../values/shape-specific-properties');
 
@@ -18,16 +18,41 @@ module.exports = {
   deps: ['Config', 'StateTracker', 'DefinePlugin', 'CurrentState', 'CurrentServerState', '$', 'PhysicsSystem'],
   func: function View (config, tracker, define, currentState, currentServerState, $) {
 
-    var overlay = require('../../views/overlays/amazing.jade');
+    //require('ensemblejs/views').overlay('amazing');
+    var overlay = require('../../views/overlays/amazing.pug');
+    //require('ensemblejs/views').partial('leaderboard-entry');
+    var leaderboardEntry = require('../../views/partials/leaderboard-entry.pug');
 
+    // Utility function, move out to pixijs-support
     function sortChildren (stage) {
       stage.children.sort(function(a,b) {
           return (b.zIndex || 0) - (a.zIndex || 0);
       });
     }
 
+    //Game assets, work out how to structure this stuff
+    //?? var assets = require('ensemblejs/assets');
+    //?? var board = assets.load('board');
+    //?? var wall = assets.load('wall');
+    //?? var goal = assets.load('goal');
+    //?? var circle = assets.load('circle');
+    // -> this goes and tries to find a registered asset
+    // assets.define('board', () => {
+    //   var shape = new PIXI.Graphics();
+    //   shape.beginFill(0x38806F);
+    //   shape.drawRect(0, 0, 520, 520);
+    //   shape.zIndex = 10000;
+
+    //   return shape;
+    // });
+
     function createBoard () {
       var shape = new PIXI.Graphics();
+      //MOVE colours into a supported feature:
+      //var colours = require('ensemblejs/colours')
+      //var colors = require('ensemblejs/colors')
+      //shape.beginFill(colours.board);
+      //The colours are picked up from a colours.json file (probably automatically filtered by modes)
       shape.beginFill(0x38806F);
       shape.drawRect(0, 0, 520, 520);
       shape.zIndex = 10000;
@@ -77,6 +102,7 @@ module.exports = {
       return shape;
     }
 
+    //view specific code
     var shapeMakers = {
       'circle': createCircle,
       'square': createSquare,
@@ -106,23 +132,22 @@ module.exports = {
       avatars[id].position.y = player.amazing.avatar.position.y;
     }
 
-    function updateDeaths (players) {
-      var deaths = reduce(players, function (total, player) {
+    //lens, pull this out
+    function deaths (state) {
+      return reduce(state.players, function (total, player) {
         return total += (player.amazing.deaths || 0);
       }, 0);
-
-      $()('#deaths').text(deaths);
     }
 
-    var player;
-    function updateTime (players) {
-      var thisPlayer = first(filter(players, {id: player}));
-
-      if (thisPlayer) {
-        $()('#time').text(numeral(thisPlayer.amazing.time).format('0.000'));
-      }
+    function updateDeaths (current) {
+      $()('#deaths').text(current);
     }
 
+    function updateTime (time) {
+     $()('#time').text(numeral(time).format('0.000'));
+    }
+
+    //lens, pull this out
     function getFullLeaderboard (players) {
       var leaderboard = [];
 
@@ -130,34 +155,39 @@ module.exports = {
         leaderboard = leaderboard.concat(player.amazing.times);
       });
 
-      return sortBy(leaderboard, 'duration');
+      return map(sortBy(leaderboard, 'duration'), (entry, index) => {
+        entry.position = index + 1;
+        return entry;
+      });
     }
 
-    function addTimeToLeaderboard (players) {
-      var leaderboard = getFullLeaderboard(players);
-      var top10 = take(leaderboard, 10);
+    //lens, pull this out
+    function leaderboard (state) {
+      return take(getFullLeaderboard(state.players), 10);
+    }
 
-      each(leaderboard, function (entry) {
-        var id = '#leaderboard-entry-' + entry.id;
-        $()(id).remove();
-      });
-
-      each(top10, function (entry) {
-        var id = '#leaderboard-entry-' + entry.id;
-
-        if ($()(id).length > 0) {
-          return;
-        }
-
+    function addTimeToLeaderboard (id, entry) {
         var time = numeral(entry.duration).format('0.000');
-        $()('#leaderboard').append(
-          '<li id="leaderboard-entry-' + entry.id + '">' + time + '</li>'
-        );
-      });
+
+        if (entry.position === 1) {
+          $()('#leaderboard').prepend(leaderboardEntry({id: id, time: time}));
+        } else {
+          $()(leaderboardEntry({id: id, time: time})).insertAfter(
+            `#leaderboard > div[order="${entry.position - 1}"]`
+          );
+        }
+        $()(`#leaderboard-entry-${id}`).attr('order', entry.position);
     }
 
-    var stage;
+    function moveTimeInLeaderboard (id, entry) {
+      $()(`#leaderboard-entry-${id}`).attr('order', entry.position);
+    }
 
+    function removeTimeFromLeaderboard (id) {
+      $()(`#leaderboard-entry-${id}`).remove();
+    }
+
+    //Screen Stuff, pull out
     function boardIsSmallerThenScreen(boardDimensions, screenDimensions) {
       return (boardDimensions.width < screenDimensions.usableWidth ||
           boardDimensions.height < screenDimensions.usableHeight);
@@ -197,11 +227,11 @@ module.exports = {
       }
     }
 
+    //Setup, pull out Pixi stuff.
+    var stage;
     var offset;
     var scale;
     return function setup (dims, playerId) {
-      player = playerId;
-
       $()('#overlay').append(overlay());
 
       stage = new PIXI.Container();
@@ -228,9 +258,9 @@ module.exports = {
       tracker().onElementAdded('players', addAvatar, [stage]);
       tracker().onElementChanged('players', moveAvatar);
       tracker().onElementAdded('amazing.corpses', addCorpse, [stage]);
-      tracker().onChangeOf('players', addTimeToLeaderboard);
-      tracker().onChangeOf('players', updateDeaths);
-      tracker().onChangeOf('players', updateTime);
+      tracker().onElement(leaderboard, addTimeToLeaderboard, moveTimeInLeaderboard, removeTimeFromLeaderboard);
+      tracker().onChangeOf(deaths, updateDeaths);
+      tracker().onChangeOf(`players:${playerId}.amazing.time`, updateTime);
 
       define()('OnPlayerGroupChange', function OnPlayerGroupChange () {
         return function hideOfflinePlayers (players) {
@@ -253,6 +283,7 @@ module.exports = {
         };
       });
 
+      // Screen stuff, pull out.
       // define()('OnResize', function OnResize () {
       //   return function resizeBoard (dims) {
       //     renderer.resize(dims.usableWidth, dims.usableHeight);

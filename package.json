@@ -10,7 +10,6 @@
     "distributedlife-sequence": "^1.0.1",
     "ensemblejs": "^6.0.0-develop",
     "gamepad-api-mappings": "^4.0.0",
-    "jade": "^1.11.0",
     "numeral": "^1.5.3",
     "pixi.js": "^3.0.9"
   },

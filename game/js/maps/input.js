@@ -4,26 +4,26 @@ function p(id, path) {
   return 'players:' + id + '.' + path;
 }
 
-function up (state, force, data) {
+function up (state, input, data) {
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: 0, y: -1}];
 }
 
-function down (state, force, data) {
+function down (state, input, data) {
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: 0, y: +1}];
 }
 
-function left (state, force, data) {
+function left (state, input, data) {
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: -1, y: 0}];
 }
 
-function right (state, force, data) {
+function right (state, input, data) {
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: +1, y: 0}];
 }
 
-function move (state, x, y, data) {
+function move (state, input, data) {
   var position = state.unwrap(p(data.playerId, 'amazing.avatar.position'));
-  var relativeX = x - position.x;
-  var relativeY = y - position.y;
+  var relativeX = input.x - position.x;
+  var relativeY = input.y - position.y;
 
   if (Math.abs(relativeX) > Math.abs(relativeY)) {
     return (relativeX > 0) ? right(state, 1, data) : left (state, 1, data);
@@ -32,15 +32,7 @@ function move (state, x, y, data) {
   }
 }
 
-function startTimer (state, force, data) {
-  if (state.get(p(data.playerId, 'amazing.time')) >= 0) {
-    return;
-  }
-
-  return [p(data.playerId, 'amazing.time'), 0];
-}
-
-function startTimerTouch (state, x, y, data) {
+function startTimer (state, input, data) {
   if (state.get(p(data.playerId, 'amazing.time')) >= 0) {
     return;
   }
@@ -65,7 +57,7 @@ module.exports = {
         {call: startTimer, onRelease: true}, {call: right, onRelease: true}
       ],
       touch0: [
-        {call: startTimerTouch, onRelease: true}, {call: move, onRelease: true}
+        {call: startTimer, onRelease: true}, {call: move, onRelease: true}
       ]
     };
   }

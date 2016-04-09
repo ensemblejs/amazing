@@ -6,11 +6,13 @@ function p(id, path) {
   return 'players:' + id + '.' + path;
 }
 
-function upDeathCount (delta, state, metadata) {
-  var deaths = state.get(p(metadata.avatars.target.id, 'amazing.deaths'));
+function increment (current) {
+  return current + 1;
+}
 
+function upDeathCount (delta, state, metadata) {
   return [
-    p(metadata.avatars.target.id, 'amazing.deaths'), deaths +1
+    p(metadata.avatars.target.id, 'amazing.deaths'), increment
   ];
 }
 

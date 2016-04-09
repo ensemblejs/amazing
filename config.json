@@ -26,6 +26,6 @@
     "multiplayer": true
   },
   "logging": {
-    "logLevel": "warn"
+    "logLevel": "info"
   }
 }
