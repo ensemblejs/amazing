@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "distributedlife-sequence": "^1.0.1",
-    "ensemblejs": "^6.0.0-develop",
+    "ensemblejs": "6.0.0-develop-15",
     "gamepad-api-mappings": "^4.0.0",
     "numeral": "^1.5.3",
     "pixi.js": "^3.0.9"

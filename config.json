@@ -1,4 +1,8 @@
 {
+  "game": {
+    "id": "amazing",
+    "name": "The Amazing Maze Demo"
+  },
   "client": {
     "aspectRatio": 1
   },
