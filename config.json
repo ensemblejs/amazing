@@ -19,7 +19,8 @@
   },
   "ensemble": {
     "maxPlayers": 30,
-    "pause": "never"
+    "pause": "never",
+    "autoSaveThrottle": 30
   },
   "debug": {
     "develop": true,
