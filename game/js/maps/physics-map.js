@@ -2,6 +2,7 @@
 
 var merge = require('lodash').merge;
 var shapeSpecificProperties = require('../values/shape-specific-properties');
+var levelLoader = require('../data/level-loader');
 
 function avatar (player) {
   var avatar = {
@@ -29,8 +30,8 @@ module.exports = {
   type: 'PhysicsMap',
   func: function () {
     return {
-      walls: require('../data/maze.json').walls,
-      goal: require('../data/maze.json').goal,
+      walls: levelLoader(require('../data/level-one')).walls,
+      goal: levelLoader(require('../data/level-one')).goal,
       corpses: [{ sourceKey: 'amazing.corpses', via: corpse}],
       avatars: [{ sourceKey: 'players', via: avatar}]
     };

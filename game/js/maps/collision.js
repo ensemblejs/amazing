@@ -1,6 +1,9 @@
 'use strict';
 
 var next = require('distributedlife-sequence').next;
+var levelLoader = require('../data/level-loader');
+
+var spawnPosition = levelLoader(require('../data/level-one')).spawn[0];
 
 function p(id, path) {
   return 'players:' + id + '.' + path;
@@ -30,7 +33,7 @@ function addCorpse (delta, state, metadata) {
 
 function respawn (delta, state, metadata) {
   return [
-    [p(metadata.avatars.target.id, 'amazing.avatar.position'), {x: 50, y: 50}],
+    [p(metadata.avatars.target.id, 'amazing.avatar.position'), spawnPosition],
     [p(metadata.avatars.target.id, 'amazing.avatar.velocity'), {x: 0, y: 0}],
     [p(metadata.avatars.target.id, 'amazing.time'), 'not-started']
   ];

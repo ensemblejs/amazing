@@ -5,7 +5,7 @@ var shapeSpecificProperties = {
     radius: 5
   },
   square: {
-    length: 10
+    length: 8
   }
 };
 

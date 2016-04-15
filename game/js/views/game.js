@@ -1,8 +1,9 @@
 'use strict';
 
 var PIXI = require('pixi.js');
-var walls = require('../data/maze').walls;
-var goal = require('../data/maze').goal;
+var levelLoader = require('../data/level-loader');
+var walls = levelLoader(require('../data/level-one')).walls;
+var goal = levelLoader(require('../data/level-one')).goal;
 var each = require('lodash').each;
 var reduce = require('lodash').reduce;
 var filter = require('lodash').filter;

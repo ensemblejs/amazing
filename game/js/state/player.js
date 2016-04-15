@@ -1,5 +1,7 @@
 'use strict';
 
+var levelLoader = require('../data/level-loader');
+
 module.exports = {
   type: 'PlayerStateSeed',
   deps: ['Config'],
@@ -19,7 +21,7 @@ module.exports = {
           avatar: {
             shape: nextShape(playerId),
             colour: nextColour(playerId),
-            position: {x: 50, y: 50},
+            position: levelLoader(require('../data/level-one')).spawn[0],
             velocity: {x: 0, y: 0}
           },
           deaths: 0,
