@@ -5,7 +5,7 @@ function p(id, path) {
 }
 
 function up (state, input, data) {
-  console.log('up2', input, data);
+  console.log('uss2', input, data);
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: 0, y: -1}];
 }
 
