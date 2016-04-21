@@ -145,7 +145,6 @@ module.exports = {
     }
 
     function updateTime (time) {
-      console.log(time);
      $()('#time').text(numeral(time).format('0.000'));
     }
 

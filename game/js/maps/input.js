@@ -5,22 +5,18 @@ function p(id, path) {
 }
 
 function up (state, input, data) {
-  console.log('uss2', input, data);
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: 0, y: -1}];
 }
 
 function down (state, input, data) {
-  console.log('down', input, data);
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: 0, y: +1}];
 }
 
 function left (state, input, data) {
-  console.log('left', input, data);
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: -1, y: 0}];
 }
 
 function right (state, input, data) {
-  console.log('right', input, data);
   return [p(data.playerId, 'amazing.avatar.velocity'), {x: +1, y: 0}];
 }
 
@@ -37,8 +33,6 @@ function move (state, input, data) {
 }
 
 function startTimer (state, input, data) {
-  console.log('startTimer', input, data);
-
   if (state.get(p(data.playerId, 'amazing.time')) >= 0) {
     return;
   }
